@@ -317,8 +317,13 @@ class BrickCollectionViewTests: XCTestCase {
         XCTAssertEqual(cell?.frame.height ?? 0, 0) //iOS9 and iOS10 have different behaviors, hence this code style to support both
 
         fixed.repeatCountHash["Brick1"] = 10
-        brickView.reloadBricksWithIdentifiers(["CollectionBrick"], shouldReloadCell: true)
-        brickView.layoutIfNeeded()
+        let expectation = expectationWithDescription("")
+
+        brickView.reloadBricksWithIdentifiers(["CollectionBrick"], shouldReloadCell: true) { completed in
+            expectation.fulfill()
+            }
+        waitForExpectationsWithTimeout(5, handler: nil)
+        brickView.layoutSubviews()
 
         cell = brickView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CollectionBrickCell
         XCTAssertEqual(cell?.frame, CGRect(x: 0, y: 0, width: 320, height: 100))
@@ -371,7 +376,7 @@ class BrickCollectionViewTests: XCTestCase {
             ])
 
         let section = BrickSection(backgroundColor: .whiteColor(), bricks: [
-            CollectionBrick("Collection 1", backgroundColor: .orangeColor(), scrollDirection: .Horizontal, dataSource: CollectionBrickCellModel(section: section1, configureHandler: { (brickCollectionCell) in
+            CollectionBrick("Collection 1", scrollDirection: .Horizontal, dataSource: CollectionBrickCellModel(section: section1, configureHandler: { (brickCollectionCell) in
                 brickCollectionCell.brickCollectionView.registerBrickClass(ImageBrick.self)
             })),
             ])

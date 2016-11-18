@@ -23,6 +23,7 @@ class CoverFlowScrollingViewController: BrickViewController {
         self.registerBrickClass(LabelBrick.self)
 
         self.view.backgroundColor = .brickBackground
+        self.view.backgroundColor = .whiteColor()
 
         let section = BrickSection(bricks: [
             LabelBrick("Brick 1", width: .Ratio(ratio: 0.5), height: .Ratio(ratio: 1.0), backgroundColor: .brickGray1, dataSource: self),

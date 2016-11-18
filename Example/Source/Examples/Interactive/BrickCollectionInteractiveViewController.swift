@@ -110,7 +110,7 @@ class BrickCollectionInteractiveViewController: BrickViewController {
 
     func updateDataSources() {
         dataSources = []
-        for _ in 0..<1 {
+        for _ in 0..<stepperModel.count {
             let dataSource = BrickCollectionViewDataSource()
             dataSource.setSection(repeatSection)
             dataSources.append(dataSource)
@@ -150,7 +150,7 @@ extension BrickCollectionInteractiveViewController: LabelBrickCellDataSource {
 extension BrickCollectionInteractiveViewController: BrickRepeatCountDataSource {
     func repeatCount(for identifier: String, with collectionIndex: Int, collectionIdentifier: String) -> Int {
         if identifier == BrickIdentifiers.repeatLabel {
-            return 1
+            return stepperModel.count
         } else {
             return 1
         }

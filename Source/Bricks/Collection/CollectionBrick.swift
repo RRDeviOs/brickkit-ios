@@ -108,18 +108,17 @@ public class CollectionBrickCell: BrickCell, Bricklike, AsynchronousResizableCel
     // https://github.com/wayfair/brickkit-ios/issues/28
     private var isCalculatingHeight = false
 
-    @IBOutlet public weak var brickCollectionView: BrickCollectionView! {
-        didSet {
-            self.layout = brickCollectionView.layout as? BrickFlowLayout
-        }
-    }
+    @IBOutlet public weak var brickCollectionView: BrickCollectionView!
+    
     @IBOutlet public weak var chevronImage: UIImageView? {
         didSet {
             chevronImage?.image = UIImage(named: "chevron", inBundle: CollectionBrick.bundle, compatibleWithTraitCollection: nil)
         }
     }
 
-    public var layout: BrickFlowLayout?
+    public var layout: BrickFlowLayout? {
+        return brickCollectionView.layout as? BrickFlowLayout
+    }
 
     public var currentPage: Int? {
         didSet {
@@ -137,6 +136,7 @@ public class CollectionBrickCell: BrickCell, Bricklike, AsynchronousResizableCel
     }
 
     public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+
         isCalculatingHeight = true
 
         brickCollectionView.frame = layoutAttributes.bounds

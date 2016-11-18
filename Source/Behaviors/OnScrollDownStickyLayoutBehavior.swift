@@ -21,7 +21,12 @@ public class OnScrollDownStickyLayoutBehavior: StickyLayoutBehavior {
 
     public override func invalidateInCollectionViewLayout(collectionViewLayout: UICollectionViewLayout, inout contentSize: CGSize, attributesDidUpdate: (attributes: BrickLayoutAttributes, oldFrame: CGRect?) -> Void) {
         let collectionView = collectionViewLayout.collectionView!
-        currentlyScrollingDown = lastCollectionViewContentOffset.y > collectionView.contentOffset.y
+
+        guard lastCollectionViewContentOffset.y != collectionView.contentOffset.y else {
+            return
+        }
+
+        currentlyScrollingDown = lastCollectionViewContentOffset.y >= collectionView.contentOffset.y
         lastCollectionViewContentOffset = collectionView.contentOffset
 
         super.invalidateInCollectionViewLayout(collectionViewLayout, contentSize: &contentSize, attributesDidUpdate: attributesDidUpdate)
@@ -51,6 +56,12 @@ public class OnScrollDownStickyLayoutBehavior: StickyLayoutBehavior {
                 attributes.frame.origin.y = stickyY + topInset
             }
             attributes.frame.origin.y = max(min(attributes.frame.origin.y, contentBounds.origin.y +  lastStickyFrame.height + topInset), attributes.originalFrame.origin.y)
+//            attributes.frame.origin.y = max(contentBounds.origin.y +  lastStickyFrame.height + topInset, attributes.originalFrame.origin.y)
+//            if attributes.indexPath == NSIndexPath(forItem: 0, inSection: 2) {
+//                print("\n")
+//                print("Attributes: \(attributes.frame)")
+//                print("ContentBounds: \(contentBounds)")
+//            }
         }
         return true
     }

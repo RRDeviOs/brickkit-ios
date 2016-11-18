@@ -22,4 +22,10 @@ class DummyBrickCell: BrickCell, Bricklike {
 
         self.contentView.layer.borderWidth = brick.border
     }
+
+    override func heightForBrickView(withWidth width: CGFloat) -> CGFloat {
+        let height = super.heightForBrickView(withWidth: width)
+        return height
+    }
+
 }

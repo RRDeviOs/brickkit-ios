@@ -51,10 +51,29 @@ class MultiSectionBrickViewController: BrickApp.BaseBrickController {
                 LabelBrick(backgroundColor: .brickGray3, text: "BRICK", configureCellBlock: configureCell),
                 ], inset: 10),
             LabelBrick(width: .Ratio(ratio: 0.5), backgroundColor: .brickGray1, text: "BRICK", configureCellBlock: configureCell),
-            LabelBrick(backgroundColor: .brickGray1, text: "BRICK", configureCellBlock: configureCell),
+            LabelBrick("THIS ONE", backgroundColor: .brickGray1, text: "BRICK", configureCellBlock: configureCell),
             ], inset: 10, edgeInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
 
+//        let section = BrickSection(bricks: [
+//            LabelBrick(height: .Fixed(size: 50), backgroundColor: .brickGray1, text: "BRICK", configureCellBlock: configureCell),
+//            BrickSection(backgroundColor: .brickGray2, bricks: [
+//                BrickSection(width: .Ratio(ratio: 1), backgroundColor: .brickGray4, bricks: [
+//                    LabelBrick(height: .Fixed(size: 50), backgroundColor: .brickGray5, text: "BRICK", configureCellBlock: configureCell),
+////                    LabelBrick(backgroundColor: .brickGray5, text: "BRICK", configureCellBlock: configureCell),
+//                    ]),
+//                ]),
+//            ])
+
         self.setSection(section)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        print("VIEW DID APPEAR")
+        for indexPath in brickCollectionView.indexPathsForVisibleItems() {
+            print(brickCollectionView.layoutAttributesForItemAtIndexPath(indexPath))
+        }
     }
     
 }

@@ -24,6 +24,11 @@ class OnScrollDownStickingViewController: BaseSectionBrickViewController {
         behavior = OnScrollDownStickyLayoutBehavior(dataSource: self)
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        print(self.collectionView?.contentInset)
+    }
+
 }
 
 extension OnScrollDownStickingViewController: StickyLayoutBehaviorDataSource {

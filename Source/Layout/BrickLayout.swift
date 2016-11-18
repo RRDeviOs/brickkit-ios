@@ -10,11 +10,6 @@ import Foundation
 
 internal typealias OnAttributesUpdatedHandler = (attributes: BrickLayoutAttributes, oldFrame: CGRect?) -> Void
 
-public enum BrickLayoutZIndexBehavior {
-    case TopDown // The cell at the top has the highest zIndex. Ideally for layouts that needs `Sticky` cells where the lower cells need to go below the top cells
-    case BottomUp // The cell at the bottom has the highest zIndex. Ideally for layouts where the lower cells are above the higher cells
-}
-
 public protocol BrickLayout: class {
     var widthRatio: CGFloat { get set }
     var behaviors: Set<BrickLayoutBehavior> { get set }
@@ -41,6 +36,29 @@ public class BrickLayoutAttributes: UICollectionViewLayoutAttributes {
     public internal(set) var originalFrame: CGRect!
     internal var identifier: String!
     internal var isEstimateSize = true
+
+    var fixedZIndex: Bool = false
+
+    public override var zIndex: Int {
+        didSet {
+            fixedZIndex = true
+        }
+    }
+
+    func setAutoZIndex(zIndex: Int) {
+        if !fixedZIndex {
+            self.zIndex = zIndex
+            fixedZIndex = false
+        }
+    }
+
+    public override var frame: CGRect {
+        didSet {
+            if indexPath == NSIndexPath(forItem: 0, inSection: 2) {
+                print("FRAME: \(frame)")
+            }
+        }
+    }
 
     public override func copyWithZone(zone: NSZone) -> AnyObject {
         let any = super.copyWithZone(zone)

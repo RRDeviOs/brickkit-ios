@@ -139,5 +139,40 @@ class OnScrollDownStickyLayoutBehaviorTests: BrickFlowLayoutBaseTests {
         XCTAssertEqual(firstAttributes?.frame, CGRect(x: 0, y: 200, width: 320, height: 100))
         XCTAssertEqual(firstAttributes?.frame, CGRect(x: 0, y: 200, width: 320, height: 100))
     }
+
+    func testThatOnScrollDownWorksWithBrickViewSameContentHeight() {
+        collectionView.registerBrickClass(DummyBrick.self)
+
+        let section = BrickSection(bricks: [
+            DummyBrick(height: .Fixed(size: 50)),
+            DummyBrick("BRICK", height: .Fixed(size: 50))
+            ])
+        let indexPath = NSIndexPath(forItem: 0, inSection: 1)
+        let stickyBehavior = OnScrollDownStickyLayoutBehavior(dataSource: FixedStickyLayoutBehaviorDataSource(indexPaths: [indexPath]))
+        self.layout.behaviors.insert(stickyBehavior)
+
+        let repeatDataSource = FixedRepeatCountDataSource(repeatCountHash: ["BRICK" : 100])
+        section.repeatCountDataSource = repeatDataSource
+
+        collectionView.setSection(section)
+        collectionView.layoutSubviews()
+
+        collectionView.contentOffset.y += 100
+        layout.invalidateLayoutWithContext(BrickLayoutInvalidationContext(type: .Scrolling))
+        collectionView.layoutSubviews()
+        collectionView.contentOffset.y -= 5
+        layout.invalidateLayoutWithContext(BrickLayoutInvalidationContext(type: .Scrolling))
+        collectionView.layoutSubviews()
+
+        collectionView.contentOffset.y -= 5
+        layout.invalidateLayoutWithContext(BrickLayoutInvalidationContext(type: .Scrolling))
+        collectionView.layoutSubviews()
+
+        layout.invalidateLayoutWithContext(BrickLayoutInvalidationContext(type: .Scrolling))
+        collectionView.layoutSubviews()
+
+        XCTAssertEqual(layout.layoutAttributesForItemAtIndexPath(indexPath)?.frame, CGRect(x: 0, y: 45, width: 320, height: 50))
+
+    }
     
 }

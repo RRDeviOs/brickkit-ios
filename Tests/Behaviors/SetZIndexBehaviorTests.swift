@@ -11,7 +11,7 @@ import XCTest
 
 class SetZIndexBehaviorTests: BrickFlowLayoutBaseTests {
     
-    func testMaxZIndex() {
+    func testSetZIndex() {
         let zIndexBehavior = SetZIndexLayoutBehavior(dataSource: FixedSetZIndexLayoutBehaviorDataSource(indexPaths: [NSIndexPath(forItem: 0, inSection: 0) : 1, NSIndexPath(forItem: 1, inSection: 0) : 2]))
         self.layout.behaviors.insert(zIndexBehavior)
 

@@ -330,8 +330,9 @@ class BrickFlowLayoutSectionTests: BrickFlowLayoutBaseTests {
         collectionView.layoutSubviews()
 
         XCTAssertEqual(layout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1))?.frame, CGRect(x: 20, y: 20, width: 135, height: 17))
-        XCTAssertEqual(layout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: 5, inSection: 1))?.frame, CGRect(x: 20, y: 272.5, width: 280, height: 17))
-        
+
+        let previousToLastFrame = layout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: 3, inSection: 1))!.frame
+        XCTAssertEqual(layout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: 5, inSection: 1))?.frame, CGRect(x: 20, y: previousToLastFrame.maxY + 10, width: 280, height: 17))
     }
 
     func testThatMultiSectionsAreCalculatedCorrectlyOnRotation() {

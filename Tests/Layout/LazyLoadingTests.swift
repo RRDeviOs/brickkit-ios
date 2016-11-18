@@ -66,7 +66,6 @@ class LazyLoadingTests: XCTestCase {
 
 
     func testThatOnlyNecessaryAttributesAreCreatedAndOrigin() {
-//        add an origin here
         brickView.registerBrickClass(DummyBrick.self)
 
         repeatBrick = DummyBrick(BrickIdentifier, height: .Fixed(size: 100))
@@ -161,7 +160,6 @@ extension LazyLoadingTests {
         XCTAssertEqual(flowLayout.sections![1]!.frame, CGRect(x: 0, y: 0, width: 320, height: 10000))
         XCTAssertNotNil(flowLayout.sections![1]!.attributes[99])
         XCTAssertEqual(flowLayout.sections![1]!.attributes[99]!.frame, CGRect(x: 0, y: 380, width: 320, height: 100))
-//        XCTAssertEqual(flowLayout.sections![1]!.attributes[99]!.originalFrame, CGRect(x: 0, y: 9900, width: 320, height: 100))
     }
 
     func testFrameOfInterestWithStickyFooter() {
@@ -289,20 +287,10 @@ extension LazyLoadingTests {
         brickView.setSection(section)
         brickView.layoutSubviews()
 
-//        while brickView.contentOffset.y < CGFloat(repeatCount * 50)  {
-//            brickView.contentOffset.y += brickView.frame.size.height
-//            brickView.layoutIfNeeded()
-//        }
-
         XCTAssertEqual(flowLayout.layoutAttributesForItemAtIndexPath(stickyIndexPath)?.frame, CGRect(x: 0, y: brickView.contentOffset.y + 480 - 50, width: 320, height: 50))
         let cell = brickView.cellForItemAtIndexPath(stickyIndexPath)
         XCTAssertNotNil(cell)
         XCTAssertEqual(cell?.frame, CGRect(x: 0, y: brickView.contentOffset.y + 480 - 50, width: 320, height: 50))
-
-//        let brickIndexPath = NSIndexPath(forItem: 0, inSection: 4)
-//        let brickCell = brickView.cellForItemAtIndexPath(brickIndexPath)
-//        XCTAssertNotNil(brickCell)
-//        XCTAssertEqual(brickCell?.frame, CGRect(x: 0, y: brickView.contentOffset.y + 480 - 50, width: 320, height: 50))
     }
 
     func testFrameOfInterestWithOffsetLayoutBehavior() {

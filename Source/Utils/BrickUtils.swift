@@ -8,9 +8,9 @@
 
 import Foundation
 
-let debug = true
+let brickDebug = false
 public func print(message: String) {
-    if debug {
+    if brickDebug {
         Swift.print(message)
     }
 }

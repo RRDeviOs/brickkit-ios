@@ -40,7 +40,7 @@ class BrickLayoutSectionTests: XCTestCase {
         continueAfterFailure = false
     }
 
-    private func createSection(widthRatios: [CGFloat], heights: [CGFloat], edgeInsets: UIEdgeInsets, inset: CGFloat, sectionWidth: CGFloat, updatedAttributes: OnAttributesUpdatedHandler? = nil) -> BrickLayoutSection {
+    private func createSection(widthRatios: [CGFloat], heights: [CGFloat], edgeInsets: UIEdgeInsets, inset: CGFloat, sectionWidth: CGFloat, invalidate: Bool = true, updatedAttributes: OnAttributesUpdatedHandler? = nil) -> BrickLayoutSection {
         dataSource = FixedBrickLayoutSectionDataSource(widthRatios: widthRatios, heights: heights, edgeInsets: edgeInsets, inset: inset)
         let section = BrickLayoutSection(
             sectionIndex: 0,
@@ -49,7 +49,9 @@ class BrickLayoutSectionTests: XCTestCase {
             origin: CGPoint.zero,
             sectionWidth: sectionWidth,
             dataSource: dataSource)
-        section.invalidateAttributes(updatedAttributes)
+        if invalidate {
+            section.invalidateAttributes(updatedAttributes)
+        }
         return section
     }
 
@@ -331,5 +333,33 @@ class BrickLayoutSectionTests: XCTestCase {
 
         XCTAssertEqual(section.frame, CGRect(x: 0, y: 0, width: 320, height: 180))
     }
+
+    func testThatContinueCalculatingReturnsRightValue() {
+        let totalNumber = 20
+        let section = createSection(Array<CGFloat>(count: totalNumber, repeatedValue: 1), heights: Array<CGFloat>(count: totalNumber, repeatedValue: 50), edgeInsets: UIEdgeInsetsZero, inset: 0, sectionWidth: 320, invalidate: false)
+        dataSource.frameOfInterest = CGRect(x: 0, y: 0, width: 320, height: 200)
+
+        XCTAssertTrue(section.continueCalculatingCells())
+        XCTAssertEqual(section.attributes.count, 4)
+        XCTAssertTrue(section.continueCalculatingCells())
+
+        dataSource.frameOfInterest = CGRect(x: 0, y: 0, width: 320, height: CGFloat(50 * totalNumber))
+        XCTAssertTrue(section.continueCalculatingCells())
+        XCTAssertEqual(section.attributes.count, totalNumber)
+        XCTAssertFalse(section.continueCalculatingCells())
+    }
+
+    func testThatContinueCalculatingReturnsRightValueWithDownstreamIndexPaths() {
+        let totalNumber = 20
+        let section = createSection(Array<CGFloat>(count: totalNumber, repeatedValue: 1), heights: Array<CGFloat>(count: totalNumber, repeatedValue: 50), edgeInsets: UIEdgeInsetsZero, inset: 0, sectionWidth: 320, invalidate: false)
+        dataSource.frameOfInterest = CGRect(x: 0, y: 0, width: 320, height: 200)
+        dataSource.downStreamIndexPaths = [NSIndexPath(forItem: totalNumber-1, inSection: 0)]
+
+        XCTAssertTrue(section.continueCalculatingCells())
+        XCTAssertEqual(section.attributes.count, 5)
+        XCTAssertTrue(section.continueCalculatingCells())
+    }
+
+
 
 }

@@ -103,7 +103,7 @@ public class BrickCell: BaseBrickCell {
     public private(set) var collectionIdentifier: String?
 
     #if os(tvOS)
-    public var allowsFocus: Bool = false
+    public var allowsFocus: Bool = true
     #endif
 
     @IBOutlet weak internal var topSpaceConstraint: NSLayoutConstraint? {
@@ -137,7 +137,7 @@ public class BrickCell: BaseBrickCell {
         }
     }
 
-    internal func setContent(brick: Brick, index: Int, collectionIndex: Int, collectionIdentifier: String?) {
+    public func setContent(brick: Brick, index: Int, collectionIndex: Int, collectionIdentifier: String?) {
         self._brick = brick
         self.index = index
         self.collectionIndex = collectionIndex
@@ -175,7 +175,7 @@ public class BrickCell: BaseBrickCell {
             return layoutAttributes
         }
 
-        let preferred = layoutAttributes.copy() as! BrickLayoutAttributes
+        let preferred = layoutAttributes.copy() as! UICollectionViewLayoutAttributes
 
         let size = CGSize(width: layoutAttributes.frame.width, height: self.heightForBrickView(withWidth: layoutAttributes.frame.width))
         preferred.frame.size = size

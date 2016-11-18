@@ -16,7 +16,7 @@ private let sortByNumber: (Int, Int) -> Bool = {$0 < $1}
 class BrickLayoutSectionBinarySearchTests: XCTestCase {
 
     var layout: BrickFlowLayout {
-        return brickView.layout as! BrickFlowLayout
+        return brickView.layout
     }
 
     var brickView: BrickCollectionView!
@@ -144,6 +144,30 @@ class BrickLayoutSectionBinarySearchTests: XCTestCase {
         let attributes = section.layoutAttributesForElementsInRect(CGRect(x: 0, y: 0, width: 320, height: 500), with: BrickZIndexer()).map(mapAttributesToItemIndex).sort(sortByNumber)
         XCTAssertEqual(attributes.count, 9)
         XCTAssertEqual(attributes,Array<Int>(1...9))
+
+    }
+
+    func testThatABrickOnTheSameRowIsAlsoTakenIntoAccount() {
+        let totalNumber = 3
+        let widthRatios = Array<CGFloat>(count: totalNumber, repeatedValue: 1/2)
+        let heights: [CGFloat] = [150, 100, 150]
+        let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let inset: CGFloat = 0
+        let sectionWidth:CGFloat = 320
+
+        dataSource = FixedBrickLayoutSectionDataSource(widthRatios: widthRatios, heights: heights, edgeInsets: edgeInsets, inset: inset)
+        let section = BrickLayoutSection(
+            sectionIndex: 0,
+            sectionAttributes: nil,
+            numberOfItems: widthRatios.count,
+            origin: CGPoint.zero,
+            sectionWidth: sectionWidth,
+            dataSource: dataSource)
+        section.invalidateAttributes(nil)
+
+        let attributes = section.layoutAttributesForElementsInRect(CGRect(x: 0, y: 120, width: 320, height: 100), with: BrickZIndexer()).map(mapAttributesToItemIndex).sort(sortByNumber)
+        XCTAssertEqual(attributes.count, 2)
+        XCTAssertEqual(attributes,[0, 2])
 
     }
 

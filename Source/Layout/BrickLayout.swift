@@ -52,14 +52,6 @@ public class BrickLayoutAttributes: UICollectionViewLayoutAttributes {
         }
     }
 
-    public override var frame: CGRect {
-        didSet {
-            if indexPath == NSIndexPath(forItem: 0, inSection: 2) {
-                print("FRAME: \(frame)")
-            }
-        }
-    }
-
     public override func copyWithZone(zone: NSZone) -> AnyObject {
         let any = super.copyWithZone(zone)
         (any as? BrickLayoutAttributes)?.originalFrame = originalFrame
